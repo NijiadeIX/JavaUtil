@@ -47,7 +47,10 @@ public class HttpRequest {
                 if (contentLength > 0) {
                     in = conn.getInputStream();
                     byte[] responseBody = new byte[contentLength];
-                    in.read(responseBody);
+                    int readTotal = 0;
+                    while (readTotal < contentLength) {
+                        readTotal += in.read(responseBody, readTotal, contentLength - readTotal);
+                    }
                     return responseBody;
                 } else {
                     return null;
@@ -109,3 +112,4 @@ public class HttpRequest {
         return new HttpRequest("DELETE", url);
     }
 }
+
